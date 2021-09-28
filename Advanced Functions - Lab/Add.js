@@ -1,11 +1,7 @@
-
-
 function solution(num) {
-
-   return function(num2) {
-     return  num + num2;
-    }
-   
+  return function (num2) {
+    return num + num2;
+  };
 }
 
 let add5 = solution(5);
