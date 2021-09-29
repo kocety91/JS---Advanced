@@ -18,13 +18,7 @@ function myFunc(inputArr) {
     let command = splitedROw[0];
     let word = splitedROw[1];
 
-    if (command == "add") {
-      obj.add(word);
-    } else if (command == "remove") {
-      obj.remove(word);
-    } else if (command == "print") {
-      obj.print();
-    }
+    obj[command](word);
   }
 }
 
