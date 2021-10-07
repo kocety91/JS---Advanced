@@ -8,22 +8,16 @@ class ArtGallery {
 
   addArticle(articleModel, articleName, quantity) {
     let articleToLower = articleModel.toLowerCase();
-    let isUpper = this._isUpper(articleModel);
     let existingArticle = this.listOfArticles.filter(
-      (x) => x.articleName === articleName
+      (x) => x.articleName === articleName && x.articleModel === articleModel
     )[0];
 
     if (!this.possibleArticles.hasOwnProperty(articleToLower)) {
       throw new Error(`This ${articleModel} is not included in this gallery!`);
     }
 
-    if (
-      this.possibleArticles.hasOwnProperty(articleToLower) &&
-      existingArticle &&
-      !isUpper
-    ) {
+    if (existingArticle) {
       existingArticle.quantity += quantity;
-      return `Successfully added article ${articleName} with a new quantity- ${quantity}.`;
     } else {
       this.listOfArticles.push({
         articleModel: articleToLower,
@@ -51,26 +45,20 @@ class ArtGallery {
 
   buyArticle(articleModel, articleName, guestName) {
     let existingArticle = this.listOfArticles.filter(
-      (x) => x.articleName === articleName
-    )[0];
-    let notMatchArticleModel = false;
-    this.listOfArticles.forEach((x) => {
-      if (x.articleModel === articleModel && x.articleName == articleName) {
-        notMatchArticleModel = true;
-      }
-    });
-
-    let notExistingGuest = this.guests.filter(
-      (x) => x.guestName === guestName
+      (x) => x.articleName === articleName && x.articleModel === articleModel
     )[0];
 
-    if (!existingArticle || !notMatchArticleModel) {
+    if (!existingArticle) {
       throw new Error(`This article is not found.`);
     }
 
     if (existingArticle.quantity === 0) {
       return `The ${articleName} is not available`;
     }
+
+    let notExistingGuest = this.guests.filter(
+      (x) => x.guestName === guestName
+    )[0];
 
     if (!notExistingGuest) {
       return `This guest is not invited`;
@@ -109,7 +97,7 @@ class ArtGallery {
       });
     }
 
-    return arr.join(" ").trim();
+    return arr.join("\n");
   }
 
   _returnPeronalityPoints(personality) {
@@ -122,18 +110,20 @@ class ArtGallery {
 
     return 50;
   }
-  _isUpper(str) {
-    return !/[a-z]/.test(str) && /[A-Z]/.test(str);
-  }
 }
 
+// const artGallery = new ArtGallery("Curtis Mayfield");
+// artGallery.addArticle("picture", "Mona Liza", 3);
+// artGallery.addArticle("Item", "Ancient vase", 2);
+// artGallery.addArticle("picture", "Mona Liza", 1);
+// artGallery.inviteGuest("John", "Vip");
+// artGallery.inviteGuest("Peter", "Middle");
+// artGallery.buyArticle("picture", "Mona Liza", "John");
+// artGallery.buyArticle("item", "Ancient vase", "Peter");
+// console.log(artGallery.showGalleryInfo("article"));
+// console.log(artGallery.showGalleryInfo("guest"));
+
 const artGallery = new ArtGallery("Curtis Mayfield");
-artGallery.addArticle("picture", "Mona Liza", 3);
-artGallery.addArticle("Item", "Ancient vase", 2);
-artGallery.addArticle("picture", "Mona Liza", 1);
-artGallery.inviteGuest("John", "Vip");
-artGallery.inviteGuest("Peter", "Middle");
-artGallery.buyArticle("picture", "Mona Liza", "John");
-artGallery.buyArticle("item", "Ancient vase", "Peter");
-console.log(artGallery.showGalleryInfo("article"));
-console.log(artGallery.showGalleryInfo("guest"));
+console.log(artGallery.addArticle("picture", "Mona Liza", 3));
+console.log(artGallery.addArticle("Item", "Ancient vase", 2));
+console.log(artGallery.addArticle("PICTURE", "Mona Liza", 1));
